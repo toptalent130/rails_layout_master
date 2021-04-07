@@ -7,10 +7,9 @@ __pycache__/
 .coverage
 
 # database & logs
-*.db
-*.sqlite3
-*.log
 
+*.log
+*.zip
 # venv
 env
 venv
