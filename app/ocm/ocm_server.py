@@ -9,9 +9,9 @@ from dash.dependencies import Input, Output, State, MATCH, ALL
 import plotly.graph_objects as go
 #import plotly.express as px
 from plotly.subplots import make_subplots
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from import_data import *
-
+from flask import send_from_directory
+import os
 # app = DjangoDash('ocm_graph')
 
 # ______________ basic parameters and loads ______________
@@ -24,8 +24,11 @@ from import_data import *
 # in import_data.py file
 
 # ______________ Chart Dash ______________
-
+accounts = loadcsvtodf(accounts_directory, 'current_user.csv')
+account_keys_values_roles = [{ 'key': row["Key"], 'value': row["Value"], 'role': row["Role"]} for index, row in accounts.iterrows() ]
+default = account_keys_values_roles[0]["value"]
 empty_row = dbc.Label(html.P(""))
+
 qd_calendar = dbc.Form(
     [
      dcc.DatePickerSingle(
@@ -51,10 +54,11 @@ qd_slider = dbc.Form(
                   step=None,
                   updatemode='drag',
                   included=False,
-                  vertical=False,
+                  vertical=True,
                   verticalHeight=450,
+                  
         )
-    ]
+    ], style={ "marginLeft":40 },
 )
 
 exp_dropdown = dbc.Form(
@@ -67,9 +71,9 @@ exp_dropdown = dbc.Form(
      disabled=True,
      clearable=False,
      style={
-     'minWidth': '125px', 
-     'fontSize': "115%",
-     'minHeight': '48px',
+     'min-width': '125px', 
+     'font-size': "115%",
+     'min-height': '48px',
      },
      )
     ]
@@ -87,10 +91,10 @@ exp_slider = dbc.Form(
                   step=None,
                   updatemode='drag',
                   included=False,
-                  vertical=False,
-                  verticalHeight=400
-        )
-    ]
+                  vertical=True,
+                  verticalHeight=450,
+                  
+        )], style={ "marginLeft":40 },
 )
 
 iv_checklist = dbc.Checklist(
@@ -256,28 +260,26 @@ update_button = dbc.Button(
     size="sm",
     color="warning",
     disabled=True,
-    style={"margin":4}
+)
+
+clear_button = dbc.Button(
+    "Clear All",
+    id="clear-all",
+    n_clicks=0,
+    outline=True,
+    size="sm",
+    color="danger"
 )
 
 ideas_buttons = html.Div(
     [
-      dbc.Button(
-      "Clear All",
-      id="clear-all",
-      n_clicks=0,
-      outline=True,
-      size="md",
-      color="danger",
-      style={"margin":4}
-    ),
     dbc.Button(
         "Add Row",
         id="add-row",
         n_clicks=0,
         outline=True,
         size="md",
-        color="primary",
-        style={"margin":4}
+        color="primary"
     ),
     dbc.FormGroup(
         [
@@ -287,9 +289,8 @@ ideas_buttons = html.Div(
         value = delta_drop[0],
         clearable=False,
         style={
-        'minWidth': '120px', 
-        'fontSize': "100%",
-        "margin": 4
+        'min-width': '120px', 
+        'font-size': "100%",
         #  'max-height': '30px',
         },
         ),
@@ -299,9 +300,8 @@ ideas_buttons = html.Div(
         value = vega_drop[0],
         clearable=False,
         style={
-        'minWidth': '120px', 
-        'fontSize': "100%",
-        "margin": 4
+        'min-width': '120px', 
+        'font-size': "100%",
         #  'max-height': '30px',
         },
         ),
@@ -311,8 +311,7 @@ ideas_buttons = html.Div(
             n_clicks=0,
             outline=True,
             size="md",
-            color="primary",
-            style={"margin":4}
+            color="primary"
         ),
         dbc.Button(
             "Show Split",
@@ -320,8 +319,7 @@ ideas_buttons = html.Div(
             n_clicks=0,
             outline=True,
             size="md",
-            color="info",
-            style={"margin":4}
+            color="info"
         ),
         dbc.Popover(
             [
@@ -334,7 +332,7 @@ ideas_buttons = html.Div(
         ),
         ],
         check = True,
-        inline = True,
+        inline = True
     ),
     dbc.Button(
         "Show Split Closing",
@@ -342,8 +340,7 @@ ideas_buttons = html.Div(
         n_clicks=0,
         outline=True,
         size="md",
-        color="info",
-        style={"margin":4}
+        color="info"
     ),
     dbc.Popover(
         [
@@ -354,8 +351,7 @@ ideas_buttons = html.Div(
         is_open=False,
         placement='top',
     ),
-    ],
-    style={"marginLeft": "20%"}
+    ]
 )
 
 project_button = dbc.Button(
@@ -364,8 +360,7 @@ project_button = dbc.Button(
     n_clicks=0,
     # outline=True,
     size="md",
-    color="secondary",
-    style={"margin":4}
+    color="secondary"
 )
 
 apply_button = dbc.Button(
@@ -375,8 +370,7 @@ apply_button = dbc.Button(
     # outline=True,
     size="md",
     color="success",
-    style={"margin":4},
-    disabled="true"
+    disabled = True,
 )
 
 trades_info_buttons = html.Div(
@@ -387,8 +381,7 @@ trades_info_buttons = html.Div(
          n_clicks=0,
         #  outline=True,
          size="sm",
-         color="info",
-         style={"margin":4}
+         color="info"
       ),
       dbc.Popover(
           [
@@ -406,8 +399,7 @@ trades_info_buttons = html.Div(
          n_clicks=0,
         #  outline=True,
          size="sm",
-         color="info",
-         style={"margin":4}
+         color="info"
       ),
       dbc.Popover(
           [
@@ -427,7 +419,6 @@ trades_info_buttons = html.Div(
          size="sm",
          color="info",
         #  className="mb-3",
-        style={"margin":4}
       ),
       dbc.Collapse(
           dbc.Card(dbc.CardBody(id="table-dayactions")),
@@ -453,6 +444,7 @@ ideas_graph = dbc.Spinner(
                   )
               )]
 )
+
 owner_card = dbc.Card(
     [
         dbc.CardHeader(
@@ -460,12 +452,13 @@ owner_card = dbc.Card(
                 [],
                 id="tabs-owner",
                 card=True,
-                active_tab="MB",
+                active_tab=default,
             )
         ),
         dbc.CardBody([
                       trades_info_buttons, 
                       html.Div(empty_row),
+                      clear_button,
                       html.Div(ideas_container),
                       html.Div(ideas_container_selected, hidden=True),
                       ideas_buttons,
@@ -473,7 +466,7 @@ owner_card = dbc.Card(
                       html.Div([project_button, apply_button]),
         ]),
     ],
-    style={"width": "auto"},
+    # style={"width": "25rem"},
 )
 
 iv_graph = dbc.Spinner(
@@ -501,34 +494,34 @@ iv_graph = dbc.Spinner(
 #fig.show(config={"displayModeBar": True, "showTips": False})  #if not shown via Dash, otherwise "app"
 
 # external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-# external_stylesheets = ['https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/cyborg/bootstrap.min.css']
-app = JupyterDash(__name__, external_stylesheets=[dbc.themes.CYBORG])
+external_javascripts = ["https://code.jquery.com/jquery-3.2.1.min.js", '/static/ocm.js']
+app = JupyterDash(__name__,  external_scripts = external_javascripts, external_stylesheets=[dbc.themes.CYBORG])
 app.config.suppress_callback_exceptions = True
+# app.scripts.config.serve_locally = True
+@app.server.route('/static/<path:path>')
+def static_file(path):
+    static_folder = os.path.join(os.getcwd(), 'static')
+    return send_from_directory(static_folder, path)
 
 app.layout = dbc.Container(
     [
-     html.Div(empty_row),
      dbc.Row([dbc.Label(html.H5("SPX Calls"), width=2),
-              dbc.Col(rank_checklist, width={"size": "auto"}), 
+              ]),
+     dbc.Row([dbc.Col(exp_dropdown, width=1),
+              dbc.Col(qd_calendar, width="auto"),   # width={"size": 'auto', "offset": 1}
+              dbc.Col(rank_checklist, width="auto"), 
               dbc.Col(iv_checklist, width={"size": 'auto', "offset": 1}),
               dbc.Col(dayaction_radioitems, width={"size": 'auto', "offset": 1}),
-              dbc.Col(update_button, width="auto"),
-              ], align='start', justify='center'),
+              dbc.Col(update_button),
+              ]),
      dbc.Row([
+              dbc.Col(exp_slider, width=1),
+              dbc.Col(qd_slider, width=1),
               dbc.Col(iv_graph),
               ], align='start', justify='center'),
-     dbc.Row([dbc.Col(exp_dropdown, width=1),
-              dbc.Col(exp_slider),
-              dbc.Col(qd_calendar, width="auto"),
-              dbc.Col(qd_slider), 
-              ], align='start', justify='center'),
-              html.Div(empty_row),
      dbc.Row([
+              dbc.Col(owner_card, width=4),
               dbc.Col(ideas_graph),
-              ], align='start', justify='center'),
-     dbc.Row([
-              dbc.Col(owner_card, width=12),
-              dbc.Col(html.Div(id="temvalue", style={'color': 'white', 'fontSize': 14}))
               ], align='start', justify='center'),
     ],
     className="p-2",
@@ -546,7 +539,6 @@ def set_update_button_state(qdseq):
     return False
   else:
     return True
-
 #--------------get iv_ec & iv_ec_color DataFrames-------------------
 @app.callback(
     Output('memory-iv_ec_color', 'data'),
@@ -620,7 +612,6 @@ def prepare_dfs(update, qdcal, qdseq, expseq, iv_ec_color_dict, iv_ec_dict, expd
       dfactual_ec['ivec_basis'] = dfactual_ec['ivec_basis']/dfactual_ec['openinterest']
       iv_ec_color = createdfiv_ec(dfactual_ec, dfhist_ec_rank, 'ivec_basis')   
     iv_ec = iv_ec.query("delta >= @mindelta and delta <= @maxdelta")
-    
   return [iv_ec_color.to_dict('records'), iv_ec.to_dict('records'), quote_date, qdseqreturn, expdropopt, expiration, expseqreturn, expslidermarks]
 
 #--------------Trades List / Trade Action Dates-------------------
@@ -925,6 +916,7 @@ def add_idea_row(update, propose, apply, clear, add, split, splitclose, ideas, s
     Output('graph-iv', 'figure'),
     Output('tabs-owner', 'children'),
     Output('apply-ideas', 'disabled'),
+    Output('tabs-owner', 'active_tab'),
     Input('update', 'n_clicks'),
     Input('project-ideas', 'n_clicks'),
     Input('apply-ideas', 'n_clicks'),
@@ -941,10 +933,10 @@ def add_idea_row(update, propose, apply, clear, add, split, splitclose, ideas, s
     State('container-ideas-selected', 'data'),
     )
 def update_figure(update, project, apply, checklistiv, checklistrank, dayaction, owner, iv_ec_color_dict, iv_ec_dict, expiration, quote_date, qdseq, ideas):
-  accounts = loadcsvtodf(accounts_directory, 'trade_accounts.csv')
-  account_keys_values = [{ 'key': row["Key"], 'value': row["Value"]} for index, row in accounts.iterrows() ]
-  current_user = loadcsvtodf(accounts_directory, 'current_user_trade_account.csv')
-  current_user_trade_account = [{ 'key': row["Key"], 'value': row["Value"]} for index, row in current_user.iterrows() ]
+  accounts = loadcsvtodf(accounts_directory, 'current_user.csv')
+  account_keys_values_roles = [{ 'key': row["Key"], 'value': row["Value"], 'role': row["Role"]} for index, row in accounts.iterrows() ]
+  # roles = loadcsvtodf(accounts_directory, 'role.csv')
+  # user_role = [{ 'Role': row["Role"]} for index, row in roles.iterrows()]
 
   triggered = [t["prop_id"] for t in dash.callback_context.triggered]
  
@@ -1093,10 +1085,14 @@ def update_figure(update, project, apply, checklistiv, checklistrank, dayaction,
        )
    dfTradesList['Expiration'] = dfTradesList.apply(
        lambda row: row['expiration'][5:7]+'/'+row['expiration'][:4], axis = 1
+
        )
    dfTradesList = dfTradesList.drop(['expiration', 'trade_close_date'], axis = 1)
    dfTradesList = dfTradesList.rename(columns={'trade_start_date': 'Start Date'})
-  tableTradesList = dbc.Table.from_dataframe(dfTradesList, key="tableTradeList", striped=True, hover=True, size='md')
+   exp_table_header = [html.Thead(html.Tr([html.Th(column) for column in dfTradesList.columns]))]
+   exp_table_body = [html.Tbody([html.Tr([html.Td(row["Start Date"]), html.Td(row["Status"]), html.Td(row["Expiration"])]) for index, row in dfTradesList.iterrows()])]
+  # tableTradesList = dbc.Table.from_dataframe(dfTradesList, key="tableTradeList", striped=True, hover=True, size='md')
+  tableTradesList = dbc.Table(exp_table_header + exp_table_body)
 
   #------------------Trade Action Dates table-----------------------------
   dfTradeActionDates = pd.DataFrame()  #(columns=['owner', 'quantity', 'Strike_Price', 'Action', 'price'])
@@ -1607,21 +1603,9 @@ def update_figure(update, project, apply, checklistiv, checklistrank, dayaction,
       # )
   ) 
   apply_select_trigger = True;
-  if owner == current_user_trade_account[0]['value']:
-    apply_select_trigger = False;
-  return [tableTradeActionDates, tableTradesList, tableDayActions, tableTradeStatusOverview, fig_ideas, fig, [dbc.Tab(label=each["value"], tab_id=each["value"]) for each in account_keys_values], apply_select_trigger]
-# def get_new_data():
-#   managers = loadcsvtodf(managers_directory, 'managers.csv')
-#   manager_names = [ row['Name'] for index, row in managers.iterrows() ]
-# def get_new_data_every(period=UPDADE_INTERVAL):
-#   while True:
-#     get_new_data()
-#     print("data updated")
-#     time.sleep(period)
-# def start_multi():
-#   executor = ProcessPoolExecutor(max_workers=1)
-#   executor.submit(get_new_data_every)
+  for element in account_keys_values_roles:
+    if element["value"] == owner and element["role"] == "Manager":
+      apply_select_trigger = False;
+  return [tableTradeActionDates, tableTradesList, tableDayActions, tableTradeStatusOverview, fig_ideas, fig, [dbc.Tab(label=each["value"], tab_id=each["value"]) for each in account_keys_values_roles], apply_select_trigger, owner]
 if __name__ == "__main__":
-  # start_multi()
-  # app.run_server(mode='inline', debug=False, use_reloader=False) #jupyter run server
   app.run_server(port=8060, debug=True, use_reloader=False) #dash run server

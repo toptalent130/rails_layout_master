@@ -10,9 +10,7 @@ ORDER_COLUMN_CHOICES = Choices(
     ('3', 'email'),
     ('4', 'username'),
     ('5', 'date_joined'),
-    ('6', 'role'),
-    ('7', 'trade_account'),
-    ('8', 'is_superuser'),
+    ('6', 'is_superuser'),
 )
 
 class UserManager(BaseUserManager):    
@@ -38,7 +36,7 @@ class UserManager(BaseUserManager):
             password=password        
         )        
         user.is_superuser = True   
-        user.role = 2     
+        # user.role = 2     
         user.save(using=self._db)        
         return user 
 
@@ -53,21 +51,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=False,
         unique=True
     )     
-    role = models.IntegerField(
-        null=False,
-        default=1,
-        # unique=True
-    )
-    trade_account = models.CharField(
-        max_length=20,
-        null=True,
-        # unique=True
-    )
     objects = UserManager()
 
-    # is_active = models.BooleanField(default=True)
-    # is_superuser = models.BooleanField(default=False)    
-    # is_staff = models.BooleanField(default=False)     
     date_joined = models.DateTimeField(auto_now_add=True)     
     USERNAME_FIELD = 'username'    
     REQUIRED_FIELDS = ['email']
@@ -84,7 +69,6 @@ def query_users_by_args(**kwargs):
     order = kwargs.get('order[0][dir]', None)[0]
 
     order_column = ORDER_COLUMN_CHOICES[order_column]
-    # django orm '-' -> desc
     if order == 'desc':
         order_column = '-' + order_column
 

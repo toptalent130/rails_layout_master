@@ -3,10 +3,12 @@ from decouple import config
 from unipath import Path
 import dj_database_url
 
+# SECURE_SSL_REDIRECT=True
+# CSRF_COOKIE_SECURE=True
+# SESSION_COOKIE_SECURE=True
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).parent
 CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
 
@@ -49,7 +51,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'core.urls'
 LOGIN_REDIRECT_URL = "home"   # Route defined in app/urls.py
 LOGOUT_REDIRECT_URL = "home"  # Route defined in app/urls.py
-TEMPLATE_DIR = os.path.join(CORE_DIR, "app/templates")  # ROOT dir for templates
+# TEMPLATE_DIR = os.path.join(CORE_DIR, "app/templates")  # ROOT dir for templates
+TEMPLATE_DIR = "E:\\Python\\ocm_project\\app\\templates"  # ROOT dir for templates
 
 TEMPLATES = [
     {
@@ -89,7 +92,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME'  : 'db.sqlite3',
+        'NAME'  : 'E:\\Python\\ocm_project\\db.sqlite3',
     }
 }
 
@@ -130,13 +133,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-STATIC_ROOT = os.path.join(CORE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(CORE_DIR, 'staticfiles')
+STATIC_ROOT = "E:\\Python\\ocm_project\\staticfiles"
 STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
-    os.path.join(CORE_DIR, 'app/static'),
-)
+# STATICFILES_DIRS = (
+#     os.path.join(CORE_DIR, 'app/static'),
+# )
+STATICFILES_DIRS = ("E:\\Python\\ocm_project\\app\\static",)
 #############################################################
 #############################################################
 # custom settings
@@ -163,3 +168,6 @@ PLOTLY_COMPONENTS = [
     'dpd_components',
     'dpd_static_support',
 ]
+MEDIA_URL = 'app/ocm_data/TW/SPX/'
+# MEDIA_ROOT = os.path.join(CORE_DIR, 'app/ocm_data/TW/SPX/')
+MEDIA_ROOT = "E:\\Python\\ocm_project\\app\\ocm_data\\TW\\SPX\\"

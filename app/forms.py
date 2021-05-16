@@ -5,13 +5,23 @@ from .models import TradeAccount
 class UserForm(forms.ModelForm):  
     class Meta:  
         model = User  
-        fields = ['username', 'email', 'role', 'trade_account'] #https://docs.djangoproject.com/en/3.0/ref/forms/widgets/
+        fields = ['username', 'email'] #https://docs.djangoproject.com/en/3.0/ref/forms/widgets/
         widgets = { 
             'username': forms.TextInput(attrs={ 'class': 'form-control' }), 
             'email': forms.EmailInput(attrs={ 'class': 'form-control' }),
-            'role': forms.TextInput(attrs={ 'class': 'form-control' }),
-            'trade_account': forms.Select(attrs={ 'class': 'form-control' }),
+            # 'role': forms.TextInput(attrs={ 'class': 'form-control' }),
+            # 'trade_account': forms.Select(attrs={ 'class': 'form-control' }),
             # 'password': forms.TextInput(attrs={ 'class': 'form-control', 'type':'password' }),
+        }
+class UserForm_1(forms.ModelForm):  
+    class Meta:  
+        model = User  
+        fields = ['username', 'email'] #https://docs.djangoproject.com/en/3.0/ref/forms/widgets/
+        widgets = { 
+            'username': forms.TextInput(attrs={ 'class': 'form-control' }),
+            'email': forms.EmailInput(attrs={ 'class': 'form-control' }),
+            # 'role': forms.TextInput(attrs={ 'class': 'form-control' }),
+            # 'trade_account': forms.TextInput(attrs={ 'class': 'form-control' }),
         }
 class TradeAccountForm(forms.Form):
     value = forms.CharField(
@@ -33,3 +43,6 @@ class TradeAccountForm(forms.Form):
     class Meta:
         model = TradeAccount
         fields = ('key', 'value')
+
+
+

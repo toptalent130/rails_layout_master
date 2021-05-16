@@ -26,8 +26,6 @@ class LoginForm(forms.Form):
         ))
 
 class SignUpForm(UserCreationForm):
-    accounts = TradeAccount.objects.filter()
-    keyvalues = [ {"id": account.id, "key": account.key, "value": account.value} for account in accounts ]
     username = forms.CharField(
         widget=forms.TextInput(
             attrs={
@@ -40,15 +38,6 @@ class SignUpForm(UserCreationForm):
         widget=forms.EmailInput(
             attrs={
                 "placeholder" : "Email",                
-                "class": "form-control",
-                "require":"true"
-            }
-        ))
-    CHOICES = [(each['id'], each['key']+"-"+each['value']) for each in keyvalues]
-    trade_account = forms.ChoiceField(
-        choices=CHOICES,
-        widget=forms.Select(
-            attrs={
                 "class": "form-control",
                 "require":"true"
             }
@@ -72,4 +61,4 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2', 'trade_account')
+        fields = ('username', 'email', 'password1', 'password2')

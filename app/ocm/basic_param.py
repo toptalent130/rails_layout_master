@@ -33,7 +33,6 @@ global account_keys_values
 global tw_accounts
 working_directory = 'E:\\Python\\ocm_project\\app\\ocm_data\\data\\SPX\\'
 toImport_directory = working_directory+'ToImport\\'
-
 tw_directory = 'E:\\Python\\ocm_project\\app\\ocm_data\\TW\\SPX\\'
 # tw_accounts = {'x2880': 'MB', 'x0197': 'MK'}
 
@@ -44,7 +43,6 @@ managers_directory = 'E:\\Python\\ocm_project\\app\\ocm_data\\Managers\\'
 accounts_directory = 'E:\\Python\\ocm_project\\app\\ocm_data\\TradeAccounts\\'
 tickerSymbol = "^SPX"
 ticker = yf.Ticker(tickerSymbol)
-UPDADE_INTERVAL = 5
 # load Accounts
 accounts = loadcsvtodf(accounts_directory, 'trade_accounts.csv')
 tw_accounts = { row["Key"]: row["Value"] for index, row in accounts.iterrows() }

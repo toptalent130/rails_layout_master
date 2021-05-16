@@ -18,7 +18,18 @@
       $("#eUsername").val(username);
       $("#eEmail").val(email);
       $("#eRole").val(role);
-      $("#eTrade").val(trade_account);
+      // var trade_array = trade_account.split(" ").slice(0, -1)
+      $("#eTrade").val(trade_account)
       $('#uForm').attr('action', 'update/'+id);
     });
+    // $(document).ready(function(){
+    //     $("#trade_accounts").click(function(){
+    //       if( $("#eTrade").css('display') == 'none' )
+    //       {
+    //         $("#eTrade").show();
+    //       } else {
+    //         $("#eTrade").hide();
+    //       }
+    //     });
+    // });
   </script>

@@ -10,6 +10,10 @@ from rest_framework.response import Response
 from .models import User
 from .serializers import UserSerializer
 from .models import query_users_by_args
+from app.forms import UserForm, TradeAccountForm
+from app.models import TradeAccount, UserTradeAccount
+from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -44,7 +48,6 @@ def login_view(request):
         else:
             msg = 'Error validating the form'    
     return render(request, "accounts/login.html", {"form": form, "msg" : msg})
-
 def register_user(request):
     msg = None
     success = False
@@ -62,9 +65,11 @@ def register_user(request):
     else:
         form = SignUpForm()
     return render(request, "accounts/register.html", {"form": form, "msg" : msg, "success" : success })
+@login_required(login_url="/login/")
 def add_user(request):
     msg     = None
     success = False
+
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -77,5 +82,38 @@ def add_user(request):
     else:
         form = SignUpForm()
 
-    return render(request, "accounts/add_user.html", {"form": form, "msg" : msg, "success" : success })
+    return render(request, "accounts/add_user.html", {"form": form,"msg" : msg, "success" : success })
+@login_required(login_url="/login/")
+def add_user_with(request):
+    msg = None
+    success = False
+    accounts = TradeAccount.objects.filter()
+    keys = [ account.key for account in accounts ]
+    values = [ account.value for account in accounts ]
+    keyvalues = [ {"id": str(account.id), "key": account.key, "value": account.value} for account in accounts ]
+    if request.method == "POST":
+        user = User.objects.filter(Q(email=request.POST["email"]))
+        if len(user) != 0:
+            filter_1 = UserTradeAccount.objects.filter(Q(user_id=user[0].id))
+            filter_2 = []
+            valid = True
+            if len(filter_1) != 0:
+                for each in filter_1:
+                    if each.trade_account_id == int(request.POST["trade_account"]):
+                        valid = False
+                        break
+            if valid == True:
+                trade_account_id = int(request.POST["trade_account"])
+                role = request.POST["role"]
+                p = UserTradeAccount(user_id=user[0].id, trade_account_id=trade_account_id, role=role)
+                p.save()
+                return redirect("/")
+            else:
+                success = False
+                msg = "Same account is already exited!"
+        else:
+            success = False
+            msg = "User is not found!"
+        return render(request, "accounts/add_user_with.html", {"accounts": keyvalues, "msg" : msg, "success" : success })
+    return render(request, "accounts/add_user_with.html", {"accounts": keyvalues, "msg" : msg, "success" : success })
 
