@@ -2,13 +2,13 @@ import os
 import pysftp
 import shutil
 from autoloadtocsv import *
-KNOWN_HOSTS_PATH = '\\home\\stock-management-django\\app\\ocm_data\\known_hosts.txt'
+KNOWN_HOSTS_PATH = '\\home\\ubuntu\\stock-management-django\\app\\ocm_data\\known_hosts.txt'
 SFTP_HOSTNAME = 'sftp.datashop.livevol.com'  # 'sftp2.datashop.livevol.com'
 SFTP_USERNAME = 'biros_michael_gmail_com'
 SFTP_PASSWORD = 'Mikelik77--'
 PATH_TO_ORDER_FILES = '/subscriptions/order_000017853/item_000021925'
-LOCAL_DIR_PATH = '\\home\\stock-management-django\\app\\ocm_data\\data\\SPX\\CBOE\\'
-IMPORT_DIR_PATH = '\\home\\stock-management-django\\app\\ocm_data\\data\\SPX\\ToImport\\'
+LOCAL_DIR_PATH = '\\home\\ubuntu\\stock-management-django\\app\\ocm_data\\data\\SPX\\CBOE\\'
+IMPORT_DIR_PATH = '\\home\\ubuntu\\stock-management-django\\app\\ocm_data\\data\\SPX\\ToImport\\'
 
 def download_zip_data():
     os.chdir(LOCAL_DIR_PATH)

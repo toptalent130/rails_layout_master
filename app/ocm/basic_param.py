@@ -31,16 +31,16 @@ def loadcsvtodf(directory, filename):
     return result
 global account_keys_values
 global tw_accounts
-working_directory = '\\home\\stock-management-django\\app\\ocm_data\\data\\SPX\\'
+working_directory = '\\home\\ubuntu\\stock-management-django\\app\\ocm_data\\data\\SPX\\'
 toImport_directory = working_directory+'ToImport\\'
-tw_directory = '\\home\\stock-management-django\\app\\ocm_data\\TW\\SPX\\'
+tw_directory = '\\home\\ubuntu\\stock-management-django\\app\\ocm_data\\TW\\SPX\\'
 # tw_accounts = {'x2880': 'MB', 'x0197': 'MK'}
 
-ideas_directory = '\\home\\stock-management-django\\app\\ocm_data\\Ideas\\SPX\\'
+ideas_directory = '\\home\\ubuntu\\stock-management-django\\app\\ocm_data\\Ideas\\SPX\\'
 
-model_directory_results = '\\home\\stock-management-django\\app\\ocm_data\\ML\\'
-managers_directory = '\\home\\stock-management-django\\ocm_data\\Managers\\'
-accounts_directory = '\\home\\stock-management-django\\ocm_data\\TradeAccounts\\'
+model_directory_results = '\\home\\ubuntu\\stock-management-django\\app\\ocm_data\\ML\\'
+managers_directory = '\\home\\ubuntu\\stock-management-django\\ocm_data\\Managers\\'
+accounts_directory = '\\home\\ubuntu\\stock-management-django\\ocm_data\\TradeAccounts\\'
 tickerSymbol = "^SPX"
 ticker = yf.Ticker(tickerSymbol)
 # load Accounts
