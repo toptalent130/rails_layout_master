@@ -30,16 +30,16 @@ def loadcsvtodf(directory, filename):
         print('File {} NOT found !!!'.format(filename))
     return result
 global tw_accounts
-working_directory = 'E:\\Python\\ocm_project\\app\\ocm_data\\data\\SPX\\'
+working_directory = '\\home\\stock-management-django\\app\\ocm_data\\data\\SPX\\'
 toImport_directory = working_directory+'ToImport\\'
-tw_directory = 'E:\\Python\\ocm_project\\app\\ocm_data\\TW\\SPX\\'
+tw_directory = '\\home\\stock-management-django\\app\\ocm_data\\TW\\SPX\\'
 # tw_accounts = {'x2880': 'MB', 'x0197': 'MK'}
 
-ideas_directory = 'E:\\Python\\ocm_project\\app\\ocm_data\\Ideas\\SPX\\'
+ideas_directory = '\\home\\stock-management-django\\app\\ocm_data\\Ideas\\SPX\\'
 
-model_directory_results = 'E:\\Python\\ocm_project\\app\\ocm_data\\ML\\'
-managers_directory = 'E:\\Python\\ocm_project\\app\\ocm_data\\Managers\\'
-accounts_directory = 'E:\\Python\\ocm_project\\app\\ocm_data\\TradeAccounts\\'
+model_directory_results = '\\home\\stock-management-django\\app\\ocm_data\\ML\\'
+managers_directory = '\\home\\stock-management-django\\app\\ocm_data\\Managers\\'
+accounts_directory = '\\home\\stock-management-django\\app\\ocm_data\\TradeAccounts\\'
 tickerSymbol = "^SPX"
 ticker = yf.Ticker(tickerSymbol)
 # load Accounts

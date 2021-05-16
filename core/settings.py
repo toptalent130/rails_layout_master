@@ -52,7 +52,7 @@ ROOT_URLCONF = 'core.urls'
 LOGIN_REDIRECT_URL = "home"   # Route defined in app/urls.py
 LOGOUT_REDIRECT_URL = "home"  # Route defined in app/urls.py
 # TEMPLATE_DIR = os.path.join(CORE_DIR, "app/templates")  # ROOT dir for templates
-TEMPLATE_DIR = "E:\\Python\\ocm_project\\app\\templates"  # ROOT dir for templates
+TEMPLATE_DIR = "\\home\\stock-management-django\\app\\templates"  # ROOT dir for templates
 
 TEMPLATES = [
     {
@@ -92,7 +92,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME'  : 'E:\\Python\\ocm_project\\db.sqlite3',
+        'NAME'  : '\\home\\stock-management-django\\db.sqlite3',
     }
 }
 
@@ -134,14 +134,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 # STATIC_ROOT = os.path.join(CORE_DIR, 'staticfiles')
-STATIC_ROOT = "E:\\Python\\ocm_project\\staticfiles"
+STATIC_ROOT = "\\home\\stock-management-django\\staticfiles"
 STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
 # STATICFILES_DIRS = (
 #     os.path.join(CORE_DIR, 'app/static'),
 # )
-STATICFILES_DIRS = ("E:\\Python\\ocm_project\\app\\static",)
+STATICFILES_DIRS = ("\\home\\stock-management-django\\app\\static",)
 #############################################################
 #############################################################
 # custom settings
@@ -170,4 +170,4 @@ PLOTLY_COMPONENTS = [
 ]
 MEDIA_URL = 'app/ocm_data/TW/SPX/'
 # MEDIA_ROOT = os.path.join(CORE_DIR, 'app/ocm_data/TW/SPX/')
-MEDIA_ROOT = "E:\\Python\\ocm_project\\app\\ocm_data\\TW\\SPX\\"
+MEDIA_ROOT = "\\home\\stock-management-django\\app\\ocm_data\\TW\\SPX\\"

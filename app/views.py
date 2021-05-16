@@ -35,7 +35,7 @@ def loadcsvtodf(directory, filename):
     return result
 @login_required(login_url="/login/")
 def index(request):
-    path="E:\\Python\\ocm_project\\app\\ocm_data\\TW\\SPX\\"  # insert the path to your directory   
+    path="\\home\\stock-management-django\\app\\ocm_data\\TW\\SPX\\"  # insert the path to your directory   
     spx_list =os.listdir(path)
     uploaded_file_url=''
     if request.method == 'POST' and bool(request.FILES.get('myfile', False)) == True:
@@ -71,7 +71,7 @@ def index(request):
         trade_keys.append(TradeAccount.objects.filter(Q(id=each.trade_account_id))[0].key)
         trade_roles.append(each.role)
     current_user = pd.DataFrame({'Key': trade_keys, 'Value': trade_values, 'Role': trade_roles}, columns=['Key','Value','Role']) 
-    current_user.to_csv('E:\\Python\\ocm_project\\app\\ocm_data\\TradeAccounts\\current_user.csv', mode='w', header=True, index=False)
+    current_user.to_csv('\\home\\stock-management-django\\app\\ocm_data\\TradeAccounts\\current_user.csv', mode='w', header=True, index=False)
 
     context = {'spx_list': spx_list, 'uploaded_file_url': uploaded_file_url, 'all_users': all_users,'all_users_trades': all_users_trades, "accounts": accounts, 'totaluser':totaluser, 'totalmanager':totalmanager, 'totalaccount':totalaccount, 'all':all_users_count }
     context['segment'] = 'user'
@@ -155,7 +155,7 @@ def add_trade_account(request):
                 keys = [ account.key for account in accounts ]
                 values = [ account.value for account in accounts ]
                 trade_accounts = pd.DataFrame({'Key': keys, 'Value': values}, columns=['Key','Value']) 
-                trade_accounts.to_csv('E:\\Python\\ocm_project\\app\\ocm_data\\TradeAccounts\\trade_accounts.csv', mode='w', header=True, index=False)
+                trade_accounts.to_csv('\\home\\stock-management-django\\app\\ocm_data\\TradeAccounts\\trade_accounts.csv', mode='w', header=True, index=False)
                 return redirect("/")
             else:
                 success = False

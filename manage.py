@@ -33,7 +33,7 @@ def start_multi():
     t.start()
 def main():
     start_multi()
-    os.chdir("E:\\Python\\ocm_project\\")
+    os.chdir("\\home\\stock-management-django\\")
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
     try:
         from django.core.management import execute_from_command_line
