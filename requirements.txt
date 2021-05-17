@@ -21,5 +21,4 @@ django_plotly_dash==1.6.3
 dpd_static_support
 whitenoise
 scipy
-django_plotly_dash
 xgboost==0.90
