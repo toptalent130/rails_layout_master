@@ -1,25 +1,18 @@
-# # byte-compiled / optimized / DLL files
-# __pycache__/
-# *.py[cod]
-
-# # tests and coverage
-# *.pytest_cache
-# .coverage
-
-# # database & logs
-
-# *.log
-# *.zip
-# # venv
-# env
-# venv
-
-# # other
-# .DS_Store
-
-# # javascript
-# package-lock.json
-
-# staticfiles/*
-# !staticfiles/.gitkeep 
-# .vscode/symbols.json
+*.gem
+*.rbc
+.bundle
+.config
+.yardoc
+Gemfile.lock
+InstalledFiles
+_yardoc
+coverage
+doc/
+lib/bundler/man
+pkg
+rdoc
+spec/reports
+test/tmp
+test/version_tmp
+tmp
+.DS_Store
